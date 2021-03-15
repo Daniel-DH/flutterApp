@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,10 +10,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
+      theme: new CupertinoThemeData(
+        brightness: Brightness.light,
+        primaryColor: CupertinoColors.white,
+        barBackgroundColor: CupertinoColors.white,
+        scaffoldBackgroundColor: CupertinoColors.white,
+        textTheme: new CupertinoTextThemeData(
+          primaryColor: CupertinoColors.black,
+          textStyle: TextStyle(color: CupertinoColors.black),
+          // ... here I actually utilised all possible parameters in the constructor
+          // as you can see in the link underneath
+        ),
       ),
       home: MyHomePage(title: 'Flutter Demo Home '),
     );
@@ -56,46 +66,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Widget> _pages = [
+    FrontPage(),
+    FrontPage(),
+    FrontPage(), // see the FrontPage class
+    SettingsPage() // see the SettingsPage class
+  ];
   int activeMenu = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: getBody(),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.black,
-            ),
-            label: 'Inicio',
+    return CupertinoPageScaffold(
+      child: CupertinoTabScaffold(
+          tabBar: CupertinoTabBar(
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.home)),
+              BottomNavigationBarItem(icon: Icon(Icons.search)),
+              BottomNavigationBarItem(icon: Icon(Icons.bookmark)),
+              BottomNavigationBarItem(icon: Icon(Icons.person))
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bookmark,
-              color: Colors.black,
-            ),
-            label: 'School',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color: Colors.black,
-            ),
-            label: 'School',
-          )
-        ],
-        currentIndex: 0,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.green,
-      ),
+          tabBuilder: (BuildContext context, index) {
+            return _pages[index];
+          }),
     );
   }
 
@@ -119,6 +111,178 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         activeMenu = index;
                       });
+                    },
+                    child: activeMenu == index
+                        ? GestureDetector(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 15, right: 15, bottom: 8, top: 8),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        menu[index],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          )
+                        : GestureDetector(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 15, right: 15, bottom: 8, top: 8),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        menu[index],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ),
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 15),
+                  height: 45,
+                  width: size.width - 70,
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey[50],
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on_rounded,
+                              color: Colors.black,
+                              size: 24.0,
+                              semanticLabel: 'location',
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("Calle Venencia...",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black))
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Container(
+                          height: 35,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  color: Colors.black,
+                                  size: 24.0,
+                                  semanticLabel: 'time',
+                                ),
+                                SizedBox(width: 4),
+                                Text("Ahora",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    )),
+                                Icon(Icons.keyboard_arrow_down),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Icon(
+                      Icons.tune_sharp,
+                      color: Colors.black,
+                      size: 24.0,
+                      semanticLabel: 'time',
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+//Banner
+
+            Container(
+              width: size.width,
+              decoration: BoxDecoration(color: Colors.black),
+              child: Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+              ),
+            )
+          ],
+        ),
+        Container(
+          width: size.width,
+          child: new Image(image: AssetImage("assets/image.jpg")),
+        ),
+      ],
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class FrontPage extends StatelessWidget {
+  int activeMenu = 0;
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return ListView(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(menu.length, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 1),
+                  child: GestureDetector(
+                    onTap: () {
+                      activeMenu = index;
                     },
                     child: activeMenu == index
                         ? GestureDetector(
@@ -415,6 +579,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         )
       ],
+    );
+  }
+}
+
+// Settings Page
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Settings'),
     );
   }
 }

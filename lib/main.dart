@@ -68,11 +68,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Widget> _pages = [
     FrontPage(),
-    FrontPage(),
-    FrontPage(), // see the FrontPage class
+    SettingsPage(),
+    SettingsPage(), // see the FrontPage class
     SettingsPage() // see the SettingsPage class
   ];
-  int activeMenu = 0;
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -93,179 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
           }),
     );
   }
-
-  Widget getBody() {
-    var size = MediaQuery.of(context).size;
-    return ListView(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(menu.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 1),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        activeMenu = index;
-                      });
-                    },
-                    child: activeMenu == index
-                        ? GestureDetector(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15, right: 15, bottom: 8, top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        menu[index],
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          )
-                        : GestureDetector(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15, right: 15, bottom: 8, top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        menu[index],
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                  ),
-                );
-              }),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 15),
-                  height: 45,
-                  width: size.width - 70,
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey[50],
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_rounded,
-                              color: Colors.black,
-                              size: 24.0,
-                              semanticLabel: 'location',
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("Calle Venencia...",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black))
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Container(
-                          height: 35,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 15, right: 15),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time,
-                                  color: Colors.black,
-                                  size: 24.0,
-                                  semanticLabel: 'time',
-                                ),
-                                SizedBox(width: 4),
-                                Text("Ahora",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    )),
-                                Icon(Icons.keyboard_arrow_down),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Icon(
-                      Icons.tune_sharp,
-                      color: Colors.black,
-                      size: 24.0,
-                      semanticLabel: 'time',
-                    ),
-                  ),
-                )
-              ],
-            ),
-
-//Banner
-
-            Container(
-              width: size.width,
-              decoration: BoxDecoration(color: Colors.black),
-              child: Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-              ),
-            )
-          ],
-        ),
-        Container(
-          width: size.width,
-          child: new Image(image: AssetImage("assets/image.jpg")),
-        ),
-      ],
-    );
-  }
 }
 
-// ignore: must_be_immutable
-class FrontPage extends StatelessWidget {
+class FrontPage extends StatefulWidget {
+  _FrontPage createState() => _FrontPage();
+}
+
+class _FrontPage extends State<FrontPage> {
   int activeMenu = 0;
   @override
   Widget build(BuildContext context) {
@@ -285,7 +118,9 @@ class FrontPage extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 1),
                   child: GestureDetector(
                     onTap: () {
-                      activeMenu = index;
+                      setState(() {
+                        activeMenu = index;
+                      });
                     },
                     child: activeMenu == index
                         ? GestureDetector(

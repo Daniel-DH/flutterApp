@@ -78,11 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return CupertinoPageScaffold(
       child: CupertinoTabScaffold(
           tabBar: CupertinoTabBar(
+            activeColor: Colors.black,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home)),
-              BottomNavigationBarItem(icon: Icon(Icons.search)),
-              BottomNavigationBarItem(icon: Icon(Icons.bookmark)),
-              BottomNavigationBarItem(icon: Icon(Icons.person))
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search), label: 'Buscar'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.bookmark), label: 'Pedidos'),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Cuenta')
             ],
           ),
           tabBuilder: (BuildContext context, index) {

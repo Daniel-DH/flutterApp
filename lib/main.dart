@@ -1,8 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -99,11 +104,28 @@ class FrontPage extends StatefulWidget {
 }
 
 class _FrontPage extends State<FrontPage> {
+  StreamSubscription<QuerySnapshot> subscription;
+  List<DocumentSnapshot> snapshot;
+
+  CollectionReference collectionReference =
+      FirebaseFirestore.instance.collection("productos");
+
+  @override
+  void initState() {
+    subscription = collectionReference.snapshots().listen((event) {
+      setState(() {
+        snapshot = event.docs;
+      });
+    });
+    super.initState();
+  }
+
   int activeMenu = 0;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return ListView(
+      shrinkWrap: true,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,104 +338,58 @@ class _FrontPage extends State<FrontPage> {
               height: 15,
             ),
             Container(
-              width: size.width,
-              child: Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          width: size.width,
-                          height: 160,
-                          child: Image.network(
-                            links[0],
-                            fit: BoxFit.cover,
-                            width: 20,
+                width: size.width,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(left: 15, right: 15),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                width: size.width,
+                                height: 160,
+                                child: Image.network(
+                                  snapshot[index].data()["imagen"],
+                                  fit: BoxFit.cover,
+                                  width: 20,
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(producto[0],
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: size.width,
-              child: Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          width: size.width,
-                          height: 160,
-                          child: Image.network(
-                            links[1],
-                            fit: BoxFit.cover,
-                            width: 20,
+                          SizedBox(
+                            height: 5,
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(producto[1],
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: size.width,
-              child: Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          width: size.width,
-                          height: 160,
-                          child: Image.network(
-                            links[2],
-                            fit: BoxFit.cover,
-                            width: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(producto[2],
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ],
-                ),
-              ),
-            ),
+                          Text(snapshot[index].data()["nombre"],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              )),
+                          Text(snapshot[index].data()["descripcion"],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              )),
+                          Text(snapshot[index].data()["precio"],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              )),
+                          Text(snapshot[index].data()["tiempo"],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              )),
+                        ],
+                      );
+                    })),
           ],
         )
       ],

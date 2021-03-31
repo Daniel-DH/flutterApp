@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "870395956386",
+    "project_id": "flutter-unipractice",
+    "storage_bucket": "flutter-unipractice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870395956386:android:f378544b8a3543a1ad1bfb",
+        "android_client_info": {
+          "package_name": "com.pinolessoftware.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870395956386-fujj4tvf2u3v133qq7ub2qrcork0hsho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOUSXqi4topzgM43ylE6ii3XbwnNhGaec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870395956386-fujj4tvf2u3v133qq7ub2qrcork0hsho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

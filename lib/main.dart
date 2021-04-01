@@ -268,6 +268,7 @@ class _FrontPage extends State<FrontPage> {
                       size: 24.0,
                       semanticLabel: 'time',
                     ),
+                    padding: EdgeInsets.only(bottom: 20, top: 10),
                   ),
                 )
               ],
@@ -276,7 +277,7 @@ class _FrontPage extends State<FrontPage> {
               width: size.width,
               decoration: BoxDecoration(color: Colors.blueGrey[50]),
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 10),
+                padding: EdgeInsets.only(bottom: 5, top: 0),
                 child: Container(
                   decoration: BoxDecoration(color: Colors.white),
                   child: Padding(
@@ -294,7 +295,7 @@ class _FrontPage extends State<FrontPage> {
               width: size.width,
               decoration: BoxDecoration(color: Colors.blueGrey[50]),
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 10),
+                padding: EdgeInsets.only(bottom: 10, top: 0),
                 child: Container(
                   decoration: BoxDecoration(color: Colors.white),
                   child: Padding(
@@ -337,59 +338,181 @@ class _FrontPage extends State<FrontPage> {
             SizedBox(
               height: 15,
             ),
+            Column(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      var list = snapshot;
+                      list.sort((a, b) {
+                        var a_double = double.parse(a.data()["precio"]);
+                        var b_double = double.parse(b.data()["precio"]);
+                        return a_double.compareTo(b_double);
+                      });
+                      setState(() {
+                        snapshot = list;
+                      });
+                    },
+                    child: Text("Order by Precio")),
+                TextButton(
+                    onPressed: () {
+                      var list = snapshot;
+                      list.sort((a, b) {
+                        return a
+                            .data()['tiempo']
+                            .toString()
+                            .toLowerCase()
+                            .compareTo(
+                                b.data()['tiempo'].toString().toLowerCase());
+                      });
+                      setState(() {
+                        snapshot = list;
+                      });
+                    },
+                    child: Text("Order by Tiempo")),
+              ],
+            ),
             Container(
-                width: size.width,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                width: size.width,
-                                height: 160,
-                                child: Image.network(
-                                  snapshot[index].data()["imagen"],
-                                  fit: BoxFit.cover,
-                                  width: 20,
+              width: size.width,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  itemCount: snapshot.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              width: size.width,
+                              height: 160,
+                              child: Image.network(
+                                snapshot[index].data()["imagen"],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 15,
+                              right: 15,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.favorite_border_outlined,
+                                    color: Colors.white,
+                                    size: 20.0,
+                                  ),
+                                ],
+                              ),
+                              width: 20,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(snapshot[index].data()["nombre"],
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w400,
+                            )),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(snapshot[index].data()["descripcion"],
+                            style: TextStyle(
+                              fontSize: 16,
+                            )),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(3)),
+                              child: Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Icon(
+                                  Icons.hourglass_bottom_outlined,
+                                  color: Colors.green[600],
+                                  size: 18,
                                 ),
-                              )
-                            ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(3)),
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  snapshot[index].data()["tiempo"],
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(3)),
+                              child: Padding(
+                                padding: EdgeInsets.all(3),
+                                child: Icon(
+                                  Icons.monetization_on_rounded,
+                                  color: Colors.yellow,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(3)),
+                              child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                    "\$" +
+                                        snapshot[index].data()["precio"] +
+                                        " MXN",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(snapshot[index].data()["nombre"],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              )),
-                          Text(snapshot[index].data()["descripcion"],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              )),
-                          Text(snapshot[index].data()["precio"],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              )),
-                          Text(snapshot[index].data()["tiempo"],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              )),
-                        ],
-                      );
-                    })),
+                          height: 15,
+                          width: size.width,
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 15,
+            ),
           ],
         )
       ],
